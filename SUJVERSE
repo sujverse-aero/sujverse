@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome to Sujverse</title>
+  <style>
+    body {
+      background-color: #0071bc;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+      flex-direction: column;
+    }
+
+    img {
+      max-width: 300px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin: 0 0 10px 0;
+    }
+
+    p {
+      font-size: 1.1em;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+<img src="C:\Users\dell\Desktop\sujverse/sujverselogo.png">
+  <h1>SUJVERSE is coming soon.</h1>
+  <p>Launching October 9, 2025</p>
+</body>
+</html>
