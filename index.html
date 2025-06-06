@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SUJVERSE</title>
+  <link rel="icon" type="image/png" href="sujverselogo.png" />
   <style>
     body {
       background-color: #0071bc;
@@ -29,14 +30,47 @@
     }
 
     p {
-      font-size: 1.1em;
-      margin: 0;
+      font-size: 1.2em;
+      margin: 5px 0;
+    }
+
+    #countdown {
+      font-size: 1.5em;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-<img src="sujverselogo.png">
-  <h1>In Progress...</h1>
+
+  <img src="sujverselogo.png" alt="SUJVERSE Logo" />
+  <h1>The Future Is Loading...</h1>
   <p>Launching October 9, 2025</p>
+  <div id="countdown">Loading countdown...</div>
+
+  <script>
+    const countdown = document.getElementById('countdown');
+
+    function updateCountdown() {
+      const now = new Date();
+      const launchDate = new Date(Date.UTC(2025, 9, 9, 0, 0, 0)); // Oct = 9 (0-indexed)
+      const totalSeconds = Math.floor((launchDate - now) / 1000);
+
+      if (totalSeconds <= 0) {
+        countdown.textContent = "We Have Launched!";
+        return;
+      }
+
+      const days = Math.floor(totalSeconds / (3600 * 24));
+      const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      countdown.textContent = `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+
 </body>
 </html>
