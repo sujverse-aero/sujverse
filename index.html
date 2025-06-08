@@ -5,13 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SUJVERSE</title>
   <link rel="icon" type="image/png" href="image_2025-06-06_224509338-removebg-preview.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
   <style>
-   body {
+    body {
       font-family: 'Exo 2', sans-serif;
-      margin: 0;
+      margin: 100;
       background: radial-gradient(circle at center, #13132b 0%, #0a0a1a 70%);
       color: #0071bc;
       overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('ddc3f52b-9f0d-4059-818e-35ea9ad58ce8.png') no-repeat center center / cover;
+      opacity: 0.08;
+      z-index: 0;
     }
 
     h1, h2, p {
@@ -20,10 +34,17 @@
 
     .glow-text {
       text-shadow: 0 0 10px rgba(100, 150, 255, 0.8);
+      animation: fadeInUp 2s ease-out, pulseGlow 3s ease-in-out infinite;
     }
 
-    .glow-box {
-      box-shadow: 0 0 15px rgba(100, 150, 255, 0.5);
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 5; transform: translateY(0); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { text-shadow: 0 0 10px rgba(100, 150, 255, 0.8), 0 0 20px rgba(100, 150, 255, 0.6); }
+      50% { text-shadow: 0 0 15px rgba(100, 150, 255, 1), 0 0 30px rgba(100, 150, 255, 0.8); }
     }
 
     .container {
@@ -37,12 +58,15 @@
       z-index: 1;
     }
 
-    .logo {
-      margin-bottom: 1rem;
+    .logo-wrapper img {
+      max-width: 220px;
+      filter: drop-shadow(0 0 20px rgba(108, 184, 255, 0.6));
+      animation: fadeIn 3s ease-in-out;
+      margin-bottom: 15px;
     }
 
     .title {
-      font-size: 3rem;
+      font-size: 5rem;
       font-weight: 700;
       color: white;
       text-align: center;
@@ -50,27 +74,20 @@
 
     @media (min-width: 768px) {
       .title {
-        font-size: 5rem;
+        font-size: 10rem;
       }
     }
 
     .subtitle {
-      font-size: 1.25rem;
+      font-size: 2.25rem;
       color: #add8ff;
-      margin-top: 0.5rem;
-      text-align: center;
-    }
-
-    .info {
-      color: #bbb;
-      font-style: italic;
-      margin-top: 0.5rem;
+      margin-top: 1.5rem;
       text-align: center;
     }
 
     .countdown-box {
-      background-color: rgba(0, 113, 188, 0.6);
-      backdrop-filter: blur(8px);
+      background: linear-gradient(135deg, rgba(0, 113, 188, 0.4), rgba(0, 113, 188, 0.2));
+      border: 1px solid rgba(108, 184, 255, 0.3);
       border-radius: 1rem;
       padding: 2rem;
       margin-top: 2rem;
@@ -78,11 +95,17 @@
       justify-content: center;
       gap: 2rem;
       flex-wrap: wrap;
+      box-shadow: 0 0 30px rgba(108, 184, 255, 0.2);
       text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .countdown-box:hover {
+      transform: scale(1.03);
     }
 
     .countdown-segment {
-      min-width: 70px;
+      min-width: 100px;
     }
 
     .countdown-value {
@@ -98,13 +121,13 @@
 
     footer {
       text-align: center;
-      padding: 1.5rem;
-      font-size: 0.9rem;
-      color: #aaa;
+      padding: 0.1rem;
+      font-size: 1rem;
+      color: white;
     }
 
     footer a {
-      color: #6cb8ff;
+      color: #0071bc;
       text-decoration: none;
     }
 
@@ -112,7 +135,6 @@
       text-decoration: underline;
     }
 
-    /* Particle styles */
     #particles {
       position: fixed;
       top: 0;
@@ -122,37 +144,28 @@
       pointer-events: none;
       z-index: 0;
     }
-    img {
-      max-width: 300px;
-      margin-bottom: 20px;
-    }
 
     .particle {
       position: absolute;
       background-color: rgba(100, 150, 255, 0.4);
-      border-radius: 50%;
+      border-radius: 70%;
       pointer-events: none;
     }
   </style>
 </head>
 <body>
+  <div class="logo-wrapper">
+    <img src="image_2025-06-06_224509338-removebg-preview.png"/>
+  </div>
 
-  <img src="image_2025-06-06_224509338-removebg-preview.png"/>
-  <!-- Particle Background -->
   <div id="particles"></div>
 
-  <!-- Main Content -->
   <div class="container">
-    <div class="logo">
-      <!-- Add your logo image here if needed -->
-    </div>
-
-    <h1 class="title glow-text">SUJVERSE</h1>
-    <h3 class="subtitle">systems calibrating...</h3>
+    <h2 class="title glow-text">SUJVERSE</h2>
+    <h3 class="subtitle">Systems Calibrating......</h3>
     <h2>Launching October 9, 2025</h2>
 
-    <!-- Countdown -->
-    <div class="countdown-box glow-box">
+    <div class="countdown-box">
       <div class="countdown-segment">
         <div class="countdown-value" id="days">00</div>
         <div class="countdown-label">Days</div>
@@ -172,13 +185,7 @@
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer>
-    © 2025 SUJVERSE
-  </footer>
-
   <script>
-    // Countdown Script
     function updateCountdown() {
       const launchDate = new Date("October 9, 2025 00:00:00").getTime();
       const now = new Date().getTime();
@@ -189,10 +196,10 @@
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      document.getElementById("days").textContent = days.toString().padStart(2, "0");
-      document.getElementById("hours").textContent = hours.toString().padStart(2, "0");
-      document.getElementById("minutes").textContent = minutes.toString().padStart(2, "0");
-      document.getElementById("seconds").textContent = seconds.toString().padStart(2, "0");
+      document.getElementById("days").textContent = String(days).padStart(2, '0');
+      document.getElementById("hours").textContent = String(hours).padStart(2, '0');
+      document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
+      document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
 
       if (distance < 0) {
         clearInterval(countdownInterval);
@@ -203,7 +210,6 @@
     const countdownInterval = setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    // Particle Generator
     function createParticles() {
       const container = document.getElementById('particles');
       const particleCount = window.innerWidth < 768 ? 30 : 80;
