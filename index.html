@@ -6,71 +6,245 @@
   <title>SUJVERSE</title>
   <link rel="icon" type="image/png" href="image_2025-06-06_224509338-removebg-preview.png" />
   <style>
-    body {
-      background-color: #0071bc;
-      color: #ffffff;
-      font-family: Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+   body {
+      font-family: 'Exo 2', sans-serif;
       margin: 0;
-      text-align: center;
-      flex-direction: column;
+      background: radial-gradient(circle at center, #13132b 0%, #0a0a1a 70%);
+      color: #0071bc;
+      overflow-x: hidden;
     }
 
+    h1, h2, p {
+      margin: 0;
+    }
+
+    .glow-text {
+      text-shadow: 0 0 10px rgba(100, 150, 255, 0.8);
+    }
+
+    .glow-box {
+      box-shadow: 0 0 15px rgba(100, 150, 255, 0.5);
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo {
+      margin-bottom: 1rem;
+    }
+
+    .title {
+      font-size: 3rem;
+      font-weight: 700;
+      color: white;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .title {
+        font-size: 5rem;
+      }
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      color: #add8ff;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+
+    .info {
+      color: #bbb;
+      font-style: italic;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+
+    .countdown-box {
+      background-color: rgba(0, 113, 188, 0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 1rem;
+      padding: 2rem;
+      margin-top: 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+
+    .countdown-segment {
+      min-width: 70px;
+    }
+
+    .countdown-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #6cb8ff;
+    }
+
+    .countdown-label {
+      font-size: 1rem;
+      color: #ccc;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    footer a {
+      color: #6cb8ff;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Particle styles */
+    #particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
     img {
       max-width: 300px;
       margin-bottom: 20px;
     }
 
-    h1 {
-      font-size: 2.5em;
-      margin: 0 0 10px 0;
-    }
-
-    p {
-      font-size: 1.2em;
-      margin: 5px 0;
-    }
-
-    #countdown {
-      font-size: 1.5em;
-      margin-top: 10px;
+    .particle {
+      position: absolute;
+      background-color: rgba(100, 150, 255, 0.4);
+      border-radius: 50%;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
 
-  <img src="sujverselogo.png" alt="SUJVERSE Logo" />
-  <h1>Systems Calibrating...</h1>
-  <p>Launching October 9, 2025</p>
-  <div id="countdown">Loading countdown...</div>
+  <img src="sujverselogo.png"/>
+  <!-- Particle Background -->
+  <div id="particles"></div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="logo">
+      <!-- Add your logo image here if needed -->
+    </div>
+
+    <h1 class="title glow-text">SUJVERSE</h1>
+    <h3 class="subtitle">systems calibrating...</h3>
+    <h2>Launching October 9, 2025</h2>
+
+    <!-- Countdown -->
+    <div class="countdown-box glow-box">
+      <div class="countdown-segment">
+        <div class="countdown-value" id="days">00</div>
+        <div class="countdown-label">Days</div>
+      </div>
+      <div class="countdown-segment">
+        <div class="countdown-value" id="hours">00</div>
+        <div class="countdown-label">Hours</div>
+      </div>
+      <div class="countdown-segment">
+        <div class="countdown-value" id="minutes">00</div>
+        <div class="countdown-label">Minutes</div>
+      </div>
+      <div class="countdown-segment">
+        <div class="countdown-value" id="seconds">00</div>
+        <div class="countdown-label">Seconds</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 SUJVERSE
+  </footer>
 
   <script>
-    const countdown = document.getElementById('countdown');
-
+    // Countdown Script
     function updateCountdown() {
-      const now = new Date();
-      const launchDate = new Date(Date.UTC(2025, 9, 9, 0, 0, 0)); // Oct = 9 (0-indexed)
-      const totalSeconds = Math.floor((launchDate - now) / 1000);
+      const launchDate = new Date("October 9, 2025 00:00:00").getTime();
+      const now = new Date().getTime();
+      const distance = launchDate - now;
 
-      if (totalSeconds <= 0) {
-        countdown.textContent = "We Have Launched!";
-        return;
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").textContent = days.toString().padStart(2, "0");
+      document.getElementById("hours").textContent = hours.toString().padStart(2, "0");
+      document.getElementById("minutes").textContent = minutes.toString().padStart(2, "0");
+      document.getElementById("seconds").textContent = seconds.toString().padStart(2, "0");
+
+      if (distance < 0) {
+        clearInterval(countdownInterval);
+        document.querySelectorAll(".countdown-value").forEach(el => el.textContent = "00");
       }
-
-      const days = Math.floor(totalSeconds / (3600 * 24));
-      const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      const seconds = totalSeconds % 60;
-
-      countdown.textContent = `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
     }
 
+    const countdownInterval = setInterval(updateCountdown, 1000);
     updateCountdown();
-    setInterval(updateCountdown, 1000);
-  </script>
 
+    // Particle Generator
+    function createParticles() {
+      const container = document.getElementById('particles');
+      const particleCount = window.innerWidth < 768 ? 30 : 80;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+
+        const size = Math.random() * 4 + 2;
+        const posX = Math.random() * window.innerWidth;
+        const posY = Math.random() * window.innerHeight;
+        const opacity = Math.random() * 0.5 + 0.2;
+        const duration = Math.random() * 10 + 5;
+        const delay = Math.random() * 5;
+
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}px`;
+        particle.style.top = `${posY}px`;
+        particle.style.opacity = opacity;
+        particle.style.animation = `float ${duration}s linear ${delay}s infinite`;
+
+        container.appendChild(particle);
+      }
+
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes float {
+          0% { transform: translateY(0) translateX(0); }
+          50% { transform: translateY(-100px) translateX(50px); }
+          100% { transform: translateY(0) translateX(0); }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    window.addEventListener('load', createParticles);
+    window.addEventListener('resize', () => {
+      document.getElementById('particles').innerHTML = '';
+      createParticles();
+    });
+  </script>
 </body>
 </html>
