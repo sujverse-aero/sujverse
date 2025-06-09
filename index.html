@@ -1,127 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tic Tac Toe</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background: #f0f0f0;
-    }
-
-    #game {
-      display: grid;
-      grid-template-columns: repeat(3, 100px);
-      grid-template-rows: repeat(3, 100px);
-      gap: 5px;
-    }
-
-    .cell {
-      background: #fff;
-      border: 2px solid #333;
-      font-size: 2.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.3s;
-    }
-
-    .cell:hover {
-      background: #e0e0e0;
-    }
-
-    #status {
-      position: absolute;
-      top: 20px;
-      font-size: 1.5rem;
-    }
-
-    #restart {
-      position: absolute;
-      bottom: 30px;
-      font-size: 1rem;
-      padding: 10px 20px;
-      background: #333;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Flight Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes cloudMove {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-200px); }
+        }
+        .cloud {
+            animation: cloudMove linear infinite;
+            animation-duration: calc(100s / var(--speed));
+        }
+        #gameArea {
+            background: linear-gradient(to bottom, #87CEEB 0%, #1E90FF 100%);
+            overflow: hidden;
+            position: relative;
+            touch-action: manipulation;
+        }
+        #plane {
+            transition: transform 0.1s ease;
+            z-index: 10;
+        }
+        #terrain {
+            background: linear-gradient(to bottom, #228B22 0%, #006400 100%);
+        }
+        .fuel-bar {
+            transition: width 0.3s ease;
+        }
+        #mobileControls {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            #mobileControls {
+                display: flex;
+            }
+        }
+    </style>
 </head>
-<body>
+<body class="bg-gray-900 flex flex-col items-center justify-center min-h-screen p-4">
+    <div class="max-w-4xl w-full">
+        <h1 class="text-3xl font-bold text-white mb-2 text-center">Flight Simulator</h1>
+        
+        <div class="flex justify-between items-center mb-2 text-white">
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center">
+                    <span class="mr-2">🏔️</span>
+                    <span id="altitude">0m</span>
+                </div>
+                <div class="w-32 bg-gray-700 rounded-full h-4">
+                    <div id="fuel" class="fuel-bar h-4 bg-yellow-500 rounded-full" style="width: 100%"></div>
+                </div>
+                <span id="fuelText">100%</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span>Score:</span>
+                <span id="score" class="font-bold">0</span>
+            </div>
+        </div>
+        
+        <div id="gameArea" class="w-full h-96 relative rounded-lg overflow-hidden border-4 border-gray-700">
+            <div id="terrain" class="absolute bottom-0 w-full h-16"></div>
+            <img id="plane" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSJ3aGl0ZSIgZD0iTTQ4MCAxNTJjLTM3LjMgMC03MC40IDIxLjEtODYuMyA1My44TDM4NCAyMzJIMTMxLjRMMTguNiA3NS4xQzM3LjIgNTguMSA3OC41IDMyIDEyOCAzMmgzNTJjOC44IDAgMTYtNy4yIDE2LTE2cy03LjItMTYtMTYtMTZIMTI4QzU3LjMgMCAwIDUzLjMgMCAxMjB2ODhjMCAxMy4zIDEwLjcgMjQgMjQgMjRoNDhjMzUuMyAwIDY0IDI4LjcgNjQgNjRzLTI4LjcgNjQtNjQgNjRIMTA2LjVsLTM2LjcgNTkuMkMzNi45IDQ2Mi44IDAgNDQzLjkgMCA0MjR2LTI0YzAtNi40IDMuMi0xMi40IDguNS0xNkwxNjAgMjU2bC0xNTEuNS05NkMzLjIgMTU0LjQgMCAxNDguNCAwIDE0MnYtMjRjMC0xOS45IDM2LjktMzguOCA2OS44LTU5LjJMMTA2LjUgMTQ0SDEzNmwyNy42LTMxLjNDMTg5LjQgMTA5LjkgMjIxLjggOTYgMjU2IDk2gDEyOGM4LjggMCAxNi03LjIgMTYtMTZzLTcuMi0xNi0xNi0xNkgyNTZjLTE5LjUgMC0zOS4xIDYtNTUuOCAxNS44bC0zLjMiIDIuOUwxOTAgMTQ0aDk2bDkuOS0yNi4yQzM1NC40IDIxLjEgMzIwIDAgMjgwIDBoLTQ4Yy0xNy43IDAtMzIgMTQuMy0zMiAzMnYxMTYuOUwyNy4zIDI3MC4yQzEwLjkgMjc4LjYgMCAyOTUuOSAwIDMxNXY4MWMwIDM4LjYgMzEuNCA2OS42IDcwIDY5LjZoMzMuOGMtMTAuOSA4LjItMTguNCAxOS43LTIxLjIgMzIuOUM4MC40IDUxNy44IDk0LjkgNTI4IDExMi4yIDUyOGgzMjguOGMxNy4zIDAgMzEuOC0xMC4yIDM4LjItMjUuOS0yLjgtMTMuMi0xMC4zLTI0LjctMjEuMi0zMi45SDQ0MGMzOC42IDAgNzAtMzEgNzAtNjkuNnYtODFjMC0xOS4xLTEwLjktMzYuNC0yNy4zLTQ0LjhMMzUyIDIxNi44VjMyaC0zMmMtNDAuNiAwLTcxLjggMjcuNi04Mi42IDY1LjRMNDU4LjEgMjg4SDQ0MGMtOC44IDAtMTYgNy4yLTE2IDE2czcuMiAxNiAxNiAxNmgzMmM4LjggMCAxNi03LjIgMTYtMTZ2LTE0NGMwLTguOC03LjItMTYtMTYtMTZINFYxMjBjMC0zMC4yIDMwLjEtNTYuMyA2NC0zNS42QzEzOC4zIDk5LjEgMTg2LjEgMTI4IDI1NiAxMjhoMTI4YzcxLjYgMCAxMjgtNDguNyAxMjgtMTEyaC00OHoiLz48L3N2Zz4=" class="absolute w-16 h-16" style="left: 50px; top: 150px;">
+            
+            <!-- Clouds will be generated by JS -->
+        </div>
+        
+        <div id="mobileControls" class="grid grid-cols-3 gap-2 mt-4">
+            <button id="upBtn" class="bg-gray-700 text-white p-4 rounded-lg col-start-2">↑</button>
+            <button id="leftBtn" class="bg-gray-700 text-white p-4 rounded-lg">←</button>
+            <button id="rightBtn" class="bg-gray-700 text-white p-4 rounded-lg">→</button>
+        </div>
+        
+        <div class="mt-4 text-white text-sm">
+            <p class="mb-2"><strong>Controls:</strong> Arrow keys to move (← → ↑ ↓). Maintain altitude and avoid crashing!</p>
+            <p><strong>Tip:</strong> Flying higher earns more points but consumes more fuel.</p>
+        </div>
+    </div>
+    
+    <!-- Game Over Modal -->
+    <div id="gameOverModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
+        <div class="bg-gray-800 p-6 rounded-lg max-w-md w-full text-white">
+            <h2 class="text-2xl font-bold mb-4">Game Over!</h2>
+            <p class="mb-2">Final Score: <span id="finalScore" class="font-bold">0</span></p>
+            <p class="mb-4">Max Altitude: <span id="maxAltitude" class="font-bold">0m</span></p>
+            <button id="restartBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Play Again
+            </button>
+        </div>
+    </div>
 
-<div id="status">Player X's turn</div>
-<div id="game"></div>
-<button id="restart">Restart</button>
-
-<script>
-  const game = document.getElementById('game');
-  const status = document.getElementById('status');
-  const restart = document.getElementById('restart');
-  let currentPlayer = 'X';
-  let board = Array(9).fill('');
-
-  function checkWinner() {
-    const wins = [
-      [0,1,2], [3,4,5], [6,7,8], // rows
-      [0,3,6], [1,4,7], [2,5,8], // cols
-      [0,4,8], [2,4,6]           // diagonals
-    ];
-
-    for (const [a,b,c] of wins) {
-      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-        status.textContent = `Player ${board[a]} wins!`;
-        game.removeEventListener('click', handleClick);
-        return true;
-      }
-    }
-
-    if (board.every(cell => cell)) {
-      status.textContent = "It's a draw!";
-      return true;
-    }
-
-    return false;
-  }
-
-  function handleClick(e) {
-    const idx = [...game.children].indexOf(e.target);
-    if (board[idx]) return;
-
-    board[idx] = currentPlayer;
-    e.target.textContent = currentPlayer;
-
-    if (!checkWinner()) {
-      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-      status.textContent = `Player ${currentPlayer}'s turn`;
-    }
-  }
-
-  function resetGame() {
-    board = Array(9).fill('');
-    currentPlayer = 'X';
-    status.textContent = "Player X's turn";
-    game.innerHTML = '';
-    for (let i = 0; i < 9; i++) {
-      const cell = document.createElement('div');
-      cell.classList.add('cell');
-      game.appendChild(cell);
-    }
-    [...game.children].forEach(cell => cell.addEventListener('click', handleClick));
-  }
-
-  restart.addEventListener('click', resetGame);
-  resetGame();
-</script>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gameArea = document.getElementById('gameArea');
+            const plane = document.getElementById('plane');
+            const altitudeDisplay = document.getElementById('altitude');
+            const fuelDisplay = document.getElementById('fuel');
+            const fuelText = document.getElementById('fuelText');
+            const scoreDisplay = document.getElementById('score');
+            const gameOverModal = document.getElementById('gameOverModal');
+            const finalScoreDisplay = document.getElementById('finalScore');
+            const maxAltitudeDisplay = document.getElementById('maxAltitude');
+            const restartBtn = document.getElementById('restartBtn');
+            
+            // Mobile controls
+            const upBtn = document.getElementById('upBtn');
+            const leftBtn = document.getElementById('leftBtn');
+            const rightBtn = document.getElementById('rightBtn');
+            
+            // Game variables
+            let planeX = 50;
+            let planeY = 150;
+            let velocityX = 0;
+            let velocityY = 0;
+            let score = 0;
+            let fuel = 100;
+            let maxAltitude = 0;
+            let gameRunning = true;
+            
+            // Movement keys state
+            const keys = {
+                ArrowUp: false,
+                ArrowDown: false,
+                ArrowLeft: false,
+                ArrowRight: false
+            };
+            
+            // Set up event listeners
+            document.addEventListener('keydown', (e) => {
+                if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                    e.preventDefault();
+                    keys[e.key] = true;
+                }
+            });
+            
+            document.addEventListener('keyup', (e) => {
+                if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                    e.preventDefault();
+                    keys[e.key] = false;
+                }
+            });
+            
+            // Mobile controls
+            upBtn.addEventListener('touchstart', () => keys.ArrowUp = true);
+            upBtn.addEventListener('touchend', () => keys.ArrowUp = false);
+            upBtn.addEventListener('mousedown', () => keys.ArrowUp = true);
+            upBtn.addEventListener('mouseup', () => keys.ArrowUp = false);
+            
+            leftBtn.addEventListener('touchstart', () => keys.ArrowLeft = true);
+            leftBtn.addEventListener('touchend', () => keys.ArrowLeft = false);
+            leftBtn.addEventListener('mousedown', () => keys.ArrowLeft = true);
+            leftBtn.addEventListener('mouseup', () => keys.ArrowLeft = false);
+            
+            rightBtn.addEventListener('touchstart', () => keys.ArrowRight = true);
+            rightBtn.addEventListener('touchend', () => keys.ArrowRight = false);
+            rightBtn.addEventListener('mousedown', () => keys.ArrowRight = true);
+            rightBtn.addEventListener('mouseup', () => keys.ArrowRight = false);
+            
+            // Restart game
+            restartBtn.addEventListener('click', restartGame);
+            
+            // Generate clouds
+            function generateClouds() {
+                const cloudCount = 8;
+                for (let i = 0; i < cloudCount; i++) {
+                    const cloud = document.createElement('div');
+                    cloud.className = 'cloud absolute bg-white rounded-full opacity-80';
+                    
+                    // Random properties for each cloud
+                    const size = Math.random() * 40 + 30;
+                    const startX = Math.random() * gameArea.offsetWidth + gameArea.offsetWidth;
+                    const startY = Math.random() * (gameArea.offsetHeight - 100);
+                    const speed = Math.random() * 0.5 + 0.5;
+                    
+                    cloud.style.width = `${size}px`;
+                    cloud.style.height = `${size * 0.6}px`;
+                    cloud.style.left = `${startX}px`;
+                    cloud.style.top = `${startY}px`;
+                    cloud.style.setProperty('--speed', speed);
+                    
+                    // Add some variation to cloud shape
+                    if (Math.random() > 0.5) {
+                        cloud.style.borderRadius = '50% 50% 30% 70% / 60% 40% 60% 40%';
+                    }
+                    
+                    gameArea.appendChild(cloud);
+                }
+            }
+            
+            // Game loop
+            function gameLoop() {
+                if (!gameRunning) return;
+                
+                // Apply forces
+                if (keys.ArrowLeft) velocityX = -3;
+                else if (keys.ArrowRight) velocityX = 3;
+                else velocityX *= 0.9; // decay
+                
+                if (keys.ArrowUp) {
+                    velocityY = -2;
+                    if (fuel > 0) fuel -= 0.1; // consume fuel when ascending
+                } else if (keys.ArrowDown) {
+                    velocityY = 2;
+                } else {
+                    velocityY += 0.2; // gravity
+                }
+                
+                // Update position
+                planeX += velocityX;
+                planeY += velocityY;
+                
+                // Boundary checks
+                if (planeX < 0) planeX = 0;
+                if (planeX > gameArea.offsetWidth - plane.offsetWidth) planeX = gameArea.offsetWidth - plane.offsetWidth;
+                
+                // Altitude (inverted y-axis)
+                const altitude = Math.max(0, (gameArea.offsetHeight - planeY - plane.offsetHeight) / 2);
+                altitudeDisplay.textContent = `${Math.floor(altitude)}m`;
+                
+                // Update max altitude
+                if (altitude > maxAltitude) {
+                    maxAltitude = Math.floor(altitude);
+                }
+                
+                // Score (higher altitude = more points)
+                score += altitude / 100;
+                scoreDisplay.textContent = Math.floor(score);
+                
+                // Fuel management
+                fuel = Math.max(0, fuel - 0.02); // constant fuel drain
+                fuelDisplay.style.width = `${fuel}%`;
+                fuelText.textContent = `${Math.floor(fuel)}%`;
+                
+                // Fuel warning
+                if (fuel < 20) {
+                    fuelDisplay.classList.remove('bg-yellow-500');
+                    fuelDisplay.classList.add('bg-red-500');
+                }
+                
+                // Update plane position and rotation
+                plane.style.left = `${planeX}px`;
+                plane.style.top = `${planeY}px`;
+                plane.style.transform = `rotate(${velocityX * 2}deg)`;
+                
+                // Check for game over conditions
+                if (planeY + plane.offsetHeight > gameArea.offsetHeight - 16) { // Hit ground
+                    gameOver();
+                } else if (fuel <= 0 && keys.ArrowUp) { // Out of fuel trying to climb
+                    gameOver();
+                } else if (planeY < 0) { // Hit top of screen
+                    gameOver();
+                }
+                
+                requestAnimationFrame(gameLoop);
+            }
+            
+            function gameOver() {
+                gameRunning = false;
+                finalScoreDisplay.textContent = Math.floor(score);
+                maxAltitudeDisplay.textContent = `${maxAltitude}m`;
+                gameOverModal.classList.remove('hidden');
+            }
+            
+            function restartGame() {
+                // Reset game state
+                planeX = 50;
+                planeY = 150;
+                velocityX = 0;
+                velocityY = 0;
+                score = 0;
+                fuel = 100;
+                maxAltitude = 0;
+                gameRunning = true;
+                
+                // Reset displays
+                scoreDisplay.textContent = '0';
+                altitudeDisplay.textContent = '0m';
+                fuelDisplay.style.width = '100%';
+                fuelText.textContent = '100%';
+                fuelDisplay.classList.remove('bg-red-500');
+                fuelDisplay.classList.add('bg-yellow-500');
+                
+                // Hide modal
+                gameOverModal.classList.add('hidden');
+                
+                // Restart game loop
+                gameLoop();
+            }
+            
+            // Initialize game
+            generateClouds();
+            gameLoop();
+        });
+    </script>
 </body>
 </html>
