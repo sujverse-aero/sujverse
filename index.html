@@ -3,296 +3,577 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Flight Simulator</title>
+    <title>Sujverse - The Future of Integrated Transportation</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @keyframes cloudMove {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-200px); }
+        .hero-gradient {
+            background: linear-gradient(135deg, #000428 0%, #004e92 100%);
         }
-        .cloud {
-            animation: cloudMove linear infinite;
-            animation-duration: calc(100s / var(--speed));
+        .card-hover {
+            transition: all 0.3s ease;
         }
-        #gameArea {
-            background: linear-gradient(to bottom, #87CEEB 0%, #1E90FF 100%);
-            overflow: hidden;
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+        .countdown-item {
             position: relative;
-            touch-action: manipulation;
         }
-        #plane {
-            transition: transform 0.1s ease;
-            z-index: 10;
+        .countdown-item:not(:last-child):after {
+            content: ":";
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: white;
         }
-        #terrain {
-            background: linear-gradient(to bottom, #228B22 0%, #006400 100%);
+        .suj-tech-logo {
+            filter: grayscale(100%) brightness(300%);
+            opacity: 0.7;
+            transition: all 0.3s ease;
         }
-        .fuel-bar {
-            transition: width 0.3s ease;
+        .suj-tech-logo:hover {
+            filter: grayscale(0%) brightness(100%);
+            opacity: 1;
         }
-        #mobileControls {
-            display: none;
+        .vehicle-animation {
+            animation: float 6s ease-in-out infinite;
         }
-        @media (max-width: 768px) {
-            #mobileControls {
-                display: flex;
-            }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
         }
     </style>
 </head>
-<body class="bg-gray-900 flex flex-col items-center justify-center min-h-screen p-4">
-    <div class="max-w-4xl w-full">
-        <h1 class="text-3xl font-bold text-white mb-2 text-center">Flight Simulator</h1>
-        
-        <div class="flex justify-between items-center mb-2 text-white">
-            <div class="flex items-center space-x-4">
-                <div class="flex items-center">
-                    <span class="mr-2">🏔️</span>
-                    <span id="altitude">0m</span>
+<body class="font-sans antialiased bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-black text-white sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-rocket text-2xl text-blue-400 mr-2"></i>
+                        <span class="text-2xl font-bold">SUJVERSE</span>
+                    </div>
                 </div>
-                <div class="w-32 bg-gray-700 rounded-full h-4">
-                    <div id="fuel" class="fuel-bar h-4 bg-yellow-500 rounded-full" style="width: 100%"></div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="hover:text-blue-300 transition">Home</a>
+                    <a href="#about" class="hover:text-blue-300 transition">About</a>
+                    <a href="#technology" class="hover:text-blue-300 transition">Technology</a>
+                    <a href="#vehicles" class="hover:text-blue-300 transition">Vehicles</a>
+                    <a href="#launch" class="hover:text-blue-300 transition">Launch</a>
+                    <a href="#contact" class="hover:text-blue-300 transition">Contact</a>
                 </div>
-                <span id="fuelText">100%</span>
-            </div>
-            <div class="flex items-center space-x-2">
-                <span>Score:</span>
-                <span id="score" class="font-bold">0</span>
+                <div class="md:hidden flex items-center">
+                    <button class="outline-none mobile-menu-button">
+                        <svg class="w-6 h-6 text-blue-300 hover:text-blue-100"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
-        
-        <div id="gameArea" class="w-full h-96 relative rounded-lg overflow-hidden border-4 border-gray-700">
-            <div id="terrain" class="absolute bottom-0 w-full h-16"></div>
-            <img id="plane" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSJ3aGl0ZSIgZD0iTTQ4MCAxNTJjLTM3LjMgMC03MC40IDIxLjEtODYuMyA1My44TDM4NCAyMzJIMTMxLjRMMTguNiA3NS4xQzM3LjIgNTguMSA3OC41IDMyIDEyOCAzMmgzNTJjOC44IDAgMTYtNy4yIDE2LTE2cy03LjItMTYtMTYtMTZIMTI4QzU3LjMgMCAwIDUzLjMgMCAxMjB2ODhjMCAxMy4zIDEwLjcgMjQgMjQgMjRoNDhjMzUuMyAwIDY0IDI4LjcgNjQgNjRzLTI4LjcgNjQtNjQgNjRIMTA2LjVsLTM2LjcgNTkuMkMzNi45IDQ2Mi44IDAgNDQzLjkgMCA0MjR2LTI0YzAtNi40IDMuMi0xMi40IDguNS0xNkwxNjAgMjU2bC0xNTEuNS05NkMzLjIgMTU0LjQgMCAxNDguNCAwIDE0MnYtMjRjMC0xOS45IDM2LjktMzguOCA2OS44LTU5LjJMMTA2LjUgMTQ0SDEzNmwyNy42LTMxLjNDMTg5LjQgMTA5LjkgMjIxLjggOTYgMjU2IDk2gDEyOGM4LjggMCAxNi03LjIgMTYtMTZzLTcuMi0xNi0xNi0xNkgyNTZjLTE5LjUgMC0zOS4xIDYtNTUuOCAxNS44bC0zLjMiIDIuOUwxOTAgMTQ0aDk2bDkuOS0yNi4yQzM1NC40IDIxLjEgMzIwIDAgMjgwIDBoLTQ4Yy0xNy43IDAtMzIgMTQuMy0zMiAzMnYxMTYuOUwyNy4zIDI3MC4yQzEwLjkgMjc4LjYgMCAyOTUuOSAwIDMxNXY4MWMwIDM4LjYgMzEuNCA2OS42IDcwIDY5LjZoMzMuOGMtMTAuOSA4LjItMTguNCAxOS43LTIxLjIgMzIuOUM4MC40IDUxNy44IDk0LjkgNTI4IDExMi4yIDUyOGgzMjguOGMxNy4zIDAgMzEuOC0xMC4yIDM4LjItMjUuOS0yLjgtMTMuMi0xMC4zLTI0LjctMjEuMi0zMi45SDQ0MGMzOC42IDAgNzAtMzEgNzAtNjkuNnYtODFjMC0xOS4xLTEwLjktMzYuNC0yNy4zLTQ0LjhMMzUyIDIxNi44VjMyaC0zMmMtNDAuNiAwLTcxLjggMjcuNi04Mi42IDY1LjRMNDU4LjEgMjg4SDQ0MGMtOC44IDAtMTYgNy4yLTE2IDE2czcuMiAxNiAxNiAxNmgzMmM4LjggMCAxNi03LjIgMTYtMTZ2LTE0NGMwLTguOC03LjItMTYtMTYtMTZINFYxMjBjMC0zMC4yIDMwLjEtNTYuMyA2NC0zNS42QzEzOC4zIDk5LjEgMTg2LjEgMTI4IDI1NiAxMjhoMTI4YzcxLjYgMCAxMjgtNDguNyAxMjgtMTEyaC00OHoiLz48L3N2Zz4=" class="absolute w-16 h-16" style="left: 50px; top: 150px;">
+        <!-- Mobile Menu -->
+        <div class="mobile-menu hidden md:hidden bg-black">
+            <div class="container mx-auto px-6 py-3 flex flex-col space-y-2">
+                <a href="#" class="block py-1 hover:text-blue-300 transition">Home</a>
+                <a href="#about" class="block py-1 hover:text-blue-300 transition">About</a>
+                <a href="#technology" class="block py-1 hover:text-blue-300 transition">Technology</a>
+                <a href="#vehicles" class="block py-1 hover:text-blue-300 transition">Vehicles</a>
+                <a href="#launch" class="block py-1 hover:text-blue-300 transition">Launch</a>
+                <a href="#contact" class="block py-1 hover:text-blue-300 transition">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white py-20 md:py-32">
+        <div class="container mx-auto px-6 py-6 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">
+                    The Future of <span class="text-blue-300">Integrated</span> Transportation
+                </h1>
+                <p class="text-xl mb-8 text-gray-200">
+                    Where aerospace, aviation, and automotive technologies converge to create revolutionary mobility solutions. Launching October 9, 2025.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#launch" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full transition duration-300">
+                        Join Our Mission
+                    </a>
+                    <a href="#vehicles" class="border-2 border-white hover:border-blue-300 text-white font-bold py-3 px-8 rounded-full transition duration-300">
+                        Explore Vehicles
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <img src="https://images.unsplash.com/photo-1589254065878-42e28c8f52a0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                     alt="Concept Vehicle" 
+                     class="w-full max-w-lg rounded-lg shadow-2xl vehicle-animation">
+            </div>
+        </div>
+    </section>
+
+    <!-- Countdown Section -->
+    <section id="launch" class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8">
+                Launch Countdown: October 9, 2025
+            </h2>
+            <div class="grid grid-cols-4 gap-4 max-w-2xl mx-auto">
+                <div class="countdown-item">
+                    <div class="text-5xl font-bold" id="days">00</div>
+                    <div class="text-sm uppercase opacity-70">Days</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="text-5xl font-bold" id="hours">00</div>
+                    <div class="text-sm uppercase opacity-70">Hours</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="text-5xl font-bold" id="minutes">00</div>
+                    <div class="text-sm uppercase opacity-70">Minutes</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="text-5xl font-bold" id="seconds">00</div>
+                    <div class="text-sm uppercase opacity-70">Seconds</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Redefining Mobility Across Domains</h2>
+                <div class="w-20 h-1 bg-blue-500 mx-auto"></div>
+                <p class="max-w-2xl mx-auto mt-6 text-gray-600">
+                    Sujverse integrates the best of NASA, SpaceX, Boeing, Airbus, Toyota, and BMW technologies to create a seamless transportation ecosystem.
+                </p>
+            </div>
             
-            <!-- Clouds will be generated by JS -->
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="bg-gray-50 p-8 rounded-xl shadow-md card-hover">
+                    <div class="text-blue-500 mb-4">
+                        <i class="fas fa-space-shuttle text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Space Innovation</h3>
+                    <p class="text-gray-600">
+                        Combining SpaceX's reusability with NASA's research to democratize space access and establish orbital infrastructure.
+                    </p>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-xl shadow-md card-hover">
+                    <div class="text-blue-500 mb-4">
+                        <i class="fas fa-plane text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Aviation Evolution</h3>
+                    <p class="text-gray-600">
+                        Merging Boeing and Airbus expertise with cutting-edge propulsion for cleaner, faster, and smarter air travel.
+                    </p>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-xl shadow-md card-hover">
+                    <div class="text-blue-500 mb-4">
+                        <i class="fas fa-car text-4xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Automotive Revolution</h3>
+                    <p class="text-gray-600">
+                        Integrating Toyota's reliability and BMW's performance with autonomous tech for next-gen personal mobility.
+                    </p>
+                </div>
+            </div>
         </div>
-        
-        <div id="mobileControls" class="grid grid-cols-3 gap-2 mt-4">
-            <button id="upBtn" class="bg-gray-700 text-white p-4 rounded-lg col-start-2">↑</button>
-            <button id="leftBtn" class="bg-gray-700 text-white p-4 rounded-lg">←</button>
-            <button id="rightBtn" class="bg-gray-700 text-white p-4 rounded-lg">→</button>
+    </section>
+
+    <!-- Technology Section -->
+    <section id="technology" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Unified Technology Platform</h2>
+                <div class="w-20 h-1 bg-blue-500 mx-auto"></div>
+                <p class="max-w-2xl mx-auto mt-6 text-gray-600">
+                    Our proprietary technologies enable seamless transitions between terrestrial, aerial, and space environments.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-10 items-center mb-16">
+                <div class="order-2 md:order-1">
+                    <h3 class="text-2xl font-bold mb-4">Adaptive Propulsion Systems</h3>
+                    <p class="text-gray-600 mb-6">
+                        Our multi-mode propulsion units automatically adjust between air-breathing jets, electric VTOL, and rocket modes based on altitude and velocity requirements.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                            <span>Single propulsion solution from ground to orbit</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                            <span>90% reduction in maintenance complexity</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                            <span>AI-optimized for maximum efficiency</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="order-1 md:order-2">
+                    <img src="https://images.unsplash.com/photo-1653471329379-4d3b12cdab4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
+                         alt="Propulsion Technology" 
+                         class="w-full rounded-xl shadow-lg">
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-10 items-center">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
+                         alt="Material Science" 
+                         class="w-full rounded-xl shadow-lg">
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">Smart Materials & Structures</h3>
+                    <p class="text-gray-600 mb-6">
+                        Our shape-memory alloys and self-healing composites revolutionize vehicle design, allowing single structures to perform optimally in atmospheres from sea level to orbit.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                            <span>Morphing aerodynamic surfaces</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                            <span>Thermal protection that adapts to heating</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
+                            <span>Nanostructured materials for extreme environments</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        
-        <div class="mt-4 text-white text-sm">
-            <p class="mb-2"><strong>Controls:</strong> Arrow keys to move (← → ↑ ↓). Maintain altitude and avoid crashing!</p>
-            <p><strong>Tip:</strong> Flying higher earns more points but consumes more fuel.</p>
+    </section>
+
+    <!-- Brands Section -->
+    <section class="py-16 bg-gray-200">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h3 class="text-xl text-gray-600">Building on the Legacy of</h3>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-6 gap-8 items-center justify-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/NASA_logo.svg" alt="NASA" class="h-12 mx-auto suj-tech-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/SpaceX_logo_black.svg" alt="SpaceX" class="h-12 mx-auto suj-tech-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Boeing_full_logo.svg" alt="Boeing" class="h-10 mx-auto suj-tech-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Airbus_Logo_2017.svg" alt="Airbus" class="h-12 mx-auto suj-tech-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/Toyota_carlogo.svg" alt="Toyota" class="h-10 mx-auto suj-tech-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" alt="BMW" class="h-10 mx-auto suj-tech-logo">
+            </div>
         </div>
-    </div>
-    
-    <!-- Game Over Modal -->
-    <div id="gameOverModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
-        <div class="bg-gray-800 p-6 rounded-lg max-w-md w-full text-white">
-            <h2 class="text-2xl font-bold mb-4">Game Over!</h2>
-            <p class="mb-2">Final Score: <span id="finalScore" class="font-bold">0</span></p>
-            <p class="mb-4">Max Altitude: <span id="maxAltitude" class="font-bold">0m</span></p>
-            <button id="restartBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Play Again
-            </button>
+    </section>
+
+    <!-- Vehicles Section -->
+    <section id="vehicles" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">The Sujverse Fleet</h2>
+                <div class="w-20 h-1 bg-blue-500 mx-auto"></div>
+                <p class="max-w-2xl mx-auto mt-6 text-gray-600">
+                    A unified vehicle ecosystem designed to work seamlessly across all transportation domains.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Vehicle 1 -->
+                <div class="bg-gray-50 rounded-xl overflow-hidden shadow-lg card-hover">
+                    <div class="h-56 bg-gray-900 flex items-center justify-center">
+                        <i class="fas fa-space-shuttle text-6xl text-blue-400"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Orion-X Spaceplane</h3>
+                        <p class="text-gray-600 mb-4">
+                            Our flagship orbital vehicle capable of runway takeoff, direct ascent to orbit, and runway landing.
+                        </p>
+                        <ul class="mb-4 space-y-2">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>100 passengers capacity</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>6-hour NYC to Sydney</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Point-to-point suborbital</span>
+                            </li>
+                        </ul>
+                        <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Vehicle 2 -->
+                <div class="bg-gray-50 rounded-xl overflow-hidden shadow-lg card-hover">
+                    <div class="h-56 bg-gray-800 flex items-center justify-center">
+                        <i class="fas fa-plane-departure text-6xl text-blue-400"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Aether Urban Commuter</h3>
+                        <p class="text-gray-600 mb-4">
+                            Transformative personal air vehicle converting between car and VTOL aircraft modes.
+                        </p>
+                        <ul class="mb-4 space-y-2">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Seats 4 comfortably</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>500 mile range</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Fully autonomous</span>
+                            </li>
+                        </ul>
+                        <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Vehicle 3 -->
+                <div class="bg-gray-50 rounded-xl overflow-hidden shadow-lg card-hover">
+                    <div class="h-56 bg-gray-700 flex items-center justify-center">
+                        <i class="fas fa-shuttle-van text-6xl text-blue-400"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">TerraMax Ground Transport</h3>
+                        <p class="text-gray-600 mb-4">
+                            Luxury autonomous ground vehicle with Space-grade comfort and safety systems.
+                        </p>
+                        <ul class="mb-4 space-y-2">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>G-force adaptive seating</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Zero-emission power</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-green-500 mr-2"></i>
+                                <span>Biometric wellness</span>
+                            </li>
+                        </ul>
+                        <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 hero-gradient text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                Be Part of the Transportation Revolution
+            </h2>
+            <p class="max-w-2xl mx-auto text-xl mb-10">
+                Join our mission to create an integrated future where boundaries between Earth and space transportation disappear.
+            </p>
+            <div class="flex flex-wrap justify-center gap-6">
+                <a href="#" class="bg-white hover:bg-gray-100 text-blue-600 font-bold py-4 px-8 rounded-full transition duration-300">
+                    Invest With Us
+                </a>
+                <a href="#" class="border-2 border-white hover:bg-white hover:text-blue-600 font-bold py-4 px-8 rounded-full transition duration-300">
+                    Careers
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Connect With Us</h2>
+                <div class="w-20 h-1 bg-blue-500 mx-auto"></div>
+                <p class="max-w-2xl mx-auto mt-6 text-gray-600">
+                    Interested in our vision? Reach out for partnerships, media inquiries, or technical information.
+                </p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <form class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <div class="mb-6">
+                            <label for="name" class="block text-gray-700 font-medium mb-2">Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="mb-6">
+                            <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="mb-6">
+                            <label for="phone" class="block text-gray-700 font-medium mb-2">Phone</label>
+                            <input type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="mb-6">
+                            <label for="subject" class="block text-gray-700 font-medium mb-2">Subject</label>
+                            <select id="subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option>General Inquiry</option>
+                                <option>Investment Opportunity</option>
+                                <option>Media Request</option>
+                                <option>Partnership</option>
+                                <option>Career Opportunity</option>
+                            </select>
+                        </div>
+                        <div class="mb-6">
+                            <label for="message" class="block text-gray-700 font-medium mb-2">Message</label>
+                            <textarea id="message" rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2 text-center">
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full transition duration-300">
+                            Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">
+                        <i class="fas fa-rocket text-blue-400 mr-2"></i> SUJVERSE
+                    </h3>
+                    <p class="text-gray-400 mb-4">
+                        Pioneering the future of integrated transportation across land, air, and space.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-youtube text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Explore</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="#technology" class="text-gray-400 hover:text-white transition">Technology</a></li>
+                        <li><a href="#vehicles" class="text-gray-400 hover:text-white transition">Vehicles</a></li>
+                        <li><a href="#launch" class="text-gray-400 hover:text-white transition">Launch</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Investors</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Media</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Press Kit</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Blog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-blue-400 mt-1 mr-2"></i>
+                            <span class="text-gray-400">1 Sujverse Way, Starbase, TX 78586</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope text-blue-400 mt-1 mr-2"></i>
+                            <span class="text-gray-400">info@sujverse.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone-alt text-blue-400 mt-1 mr-2"></i>
+                            <span class="text-gray-400">+1 (888) SJVR-SPN</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <div class="text-gray-400 text-sm mb-4 md:mb-0">
+                    &copy; 2023 Sujverse Corporation. All rights reserved.
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const gameArea = document.getElementById('gameArea');
-            const plane = document.getElementById('plane');
-            const altitudeDisplay = document.getElementById('altitude');
-            const fuelDisplay = document.getElementById('fuel');
-            const fuelText = document.getElementById('fuelText');
-            const scoreDisplay = document.getElementById('score');
-            const gameOverModal = document.getElementById('gameOverModal');
-            const finalScoreDisplay = document.getElementById('finalScore');
-            const maxAltitudeDisplay = document.getElementById('maxAltitude');
-            const restartBtn = document.getElementById('restartBtn');
+        // Mobile menu toggle
+        const btn = document.querySelector(".mobile-menu-button");
+        const menu = document.querySelector(".mobile-menu");
+        
+        btn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+        });
+
+        // Countdown timer
+        function updateCountdown() {
+            const launchDate = new Date("October 9, 2025 00:00:00").getTime();
+            const now = new Date().getTime();
+            const distance = launchDate - now;
             
-            // Mobile controls
-            const upBtn = document.getElementById('upBtn');
-            const leftBtn = document.getElementById('leftBtn');
-            const rightBtn = document.getElementById('rightBtn');
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
             
-            // Game variables
-            let planeX = 50;
-            let planeY = 150;
-            let velocityX = 0;
-            let velocityY = 0;
-            let score = 0;
-            let fuel = 100;
-            let maxAltitude = 0;
-            let gameRunning = true;
-            
-            // Movement keys state
-            const keys = {
-                ArrowUp: false,
-                ArrowDown: false,
-                ArrowLeft: false,
-                ArrowRight: false
-            };
-            
-            // Set up event listeners
-            document.addEventListener('keydown', (e) => {
-                if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-                    e.preventDefault();
-                    keys[e.key] = true;
-                }
+            document.getElementById("days").innerHTML = days.toString().padStart(2, "0");
+            document.getElementById("hours").innerHTML = hours.toString().padStart(2, "0");
+            document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, "0");
+            document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, "0");
+        }
+        
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // Close mobile menu if open
+                menu.classList.add('hidden');
             });
-            
-            document.addEventListener('keyup', (e) => {
-                if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-                    e.preventDefault();
-                    keys[e.key] = false;
-                }
-            });
-            
-            // Mobile controls
-            upBtn.addEventListener('touchstart', () => keys.ArrowUp = true);
-            upBtn.addEventListener('touchend', () => keys.ArrowUp = false);
-            upBtn.addEventListener('mousedown', () => keys.ArrowUp = true);
-            upBtn.addEventListener('mouseup', () => keys.ArrowUp = false);
-            
-            leftBtn.addEventListener('touchstart', () => keys.ArrowLeft = true);
-            leftBtn.addEventListener('touchend', () => keys.ArrowLeft = false);
-            leftBtn.addEventListener('mousedown', () => keys.ArrowLeft = true);
-            leftBtn.addEventListener('mouseup', () => keys.ArrowLeft = false);
-            
-            rightBtn.addEventListener('touchstart', () => keys.ArrowRight = true);
-            rightBtn.addEventListener('touchend', () => keys.ArrowRight = false);
-            rightBtn.addEventListener('mousedown', () => keys.ArrowRight = true);
-            rightBtn.addEventListener('mouseup', () => keys.ArrowRight = false);
-            
-            // Restart game
-            restartBtn.addEventListener('click', restartGame);
-            
-            // Generate clouds
-            function generateClouds() {
-                const cloudCount = 8;
-                for (let i = 0; i < cloudCount; i++) {
-                    const cloud = document.createElement('div');
-                    cloud.className = 'cloud absolute bg-white rounded-full opacity-80';
-                    
-                    // Random properties for each cloud
-                    const size = Math.random() * 40 + 30;
-                    const startX = Math.random() * gameArea.offsetWidth + gameArea.offsetWidth;
-                    const startY = Math.random() * (gameArea.offsetHeight - 100);
-                    const speed = Math.random() * 0.5 + 0.5;
-                    
-                    cloud.style.width = `${size}px`;
-                    cloud.style.height = `${size * 0.6}px`;
-                    cloud.style.left = `${startX}px`;
-                    cloud.style.top = `${startY}px`;
-                    cloud.style.setProperty('--speed', speed);
-                    
-                    // Add some variation to cloud shape
-                    if (Math.random() > 0.5) {
-                        cloud.style.borderRadius = '50% 50% 30% 70% / 60% 40% 60% 40%';
-                    }
-                    
-                    gameArea.appendChild(cloud);
-                }
-            }
-            
-            // Game loop
-            function gameLoop() {
-                if (!gameRunning) return;
-                
-                // Apply forces
-                if (keys.ArrowLeft) velocityX = -3;
-                else if (keys.ArrowRight) velocityX = 3;
-                else velocityX *= 0.9; // decay
-                
-                if (keys.ArrowUp) {
-                    velocityY = -2;
-                    if (fuel > 0) fuel -= 0.1; // consume fuel when ascending
-                } else if (keys.ArrowDown) {
-                    velocityY = 2;
-                } else {
-                    velocityY += 0.2; // gravity
-                }
-                
-                // Update position
-                planeX += velocityX;
-                planeY += velocityY;
-                
-                // Boundary checks
-                if (planeX < 0) planeX = 0;
-                if (planeX > gameArea.offsetWidth - plane.offsetWidth) planeX = gameArea.offsetWidth - plane.offsetWidth;
-                
-                // Altitude (inverted y-axis)
-                const altitude = Math.max(0, (gameArea.offsetHeight - planeY - plane.offsetHeight) / 2);
-                altitudeDisplay.textContent = `${Math.floor(altitude)}m`;
-                
-                // Update max altitude
-                if (altitude > maxAltitude) {
-                    maxAltitude = Math.floor(altitude);
-                }
-                
-                // Score (higher altitude = more points)
-                score += altitude / 100;
-                scoreDisplay.textContent = Math.floor(score);
-                
-                // Fuel management
-                fuel = Math.max(0, fuel - 0.02); // constant fuel drain
-                fuelDisplay.style.width = `${fuel}%`;
-                fuelText.textContent = `${Math.floor(fuel)}%`;
-                
-                // Fuel warning
-                if (fuel < 20) {
-                    fuelDisplay.classList.remove('bg-yellow-500');
-                    fuelDisplay.classList.add('bg-red-500');
-                }
-                
-                // Update plane position and rotation
-                plane.style.left = `${planeX}px`;
-                plane.style.top = `${planeY}px`;
-                plane.style.transform = `rotate(${velocityX * 2}deg)`;
-                
-                // Check for game over conditions
-                if (planeY + plane.offsetHeight > gameArea.offsetHeight - 16) { // Hit ground
-                    gameOver();
-                } else if (fuel <= 0 && keys.ArrowUp) { // Out of fuel trying to climb
-                    gameOver();
-                } else if (planeY < 0) { // Hit top of screen
-                    gameOver();
-                }
-                
-                requestAnimationFrame(gameLoop);
-            }
-            
-            function gameOver() {
-                gameRunning = false;
-                finalScoreDisplay.textContent = Math.floor(score);
-                maxAltitudeDisplay.textContent = `${maxAltitude}m`;
-                gameOverModal.classList.remove('hidden');
-            }
-            
-            function restartGame() {
-                // Reset game state
-                planeX = 50;
-                planeY = 150;
-                velocityX = 0;
-                velocityY = 0;
-                score = 0;
-                fuel = 100;
-                maxAltitude = 0;
-                gameRunning = true;
-                
-                // Reset displays
-                scoreDisplay.textContent = '0';
-                altitudeDisplay.textContent = '0m';
-                fuelDisplay.style.width = '100%';
-                fuelText.textContent = '100%';
-                fuelDisplay.classList.remove('bg-red-500');
-                fuelDisplay.classList.add('bg-yellow-500');
-                
-                // Hide modal
-                gameOverModal.classList.add('hidden');
-                
-                // Restart game loop
-                gameLoop();
-            }
-            
-            // Initialize game
-            generateClouds();
-            gameLoop();
         });
     </script>
 </body>
