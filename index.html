@@ -1,658 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4415048351934765"
-     crossorigin="anonymous"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sujverse - The Future of Integrated Transportation</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="image_2025-06-06_224509338-removebg-preview.png">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SUJVERSE | Aviation Meets Innovation</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        .hero-gradient {
-            background: linear-gradient(135deg, #000428 0%, #004e92 100%);
-        }
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-        }
-        .countdown-item {
-            position: relative;
-        }
-        .countdown-item:not(:last-child):after {
-            content: ":";
-            position: absolute;
-            right: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 2rem;
-            color: white;
-        }
-        .suj-tech-logo {
-            filter: grayscale(100%) brightness(300%);
-            opacity: 0.7;
-            transition: all 0.3s ease;
-        }
-        .suj-tech-logo:hover {
-            filter: grayscale(0%) brightness(100%);
-            opacity: 1;
-        }
-        .vehicle-animation {
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
-        "use client";
-
-import type { Variants } from "motion/react";
-import { motion, useAnimation } from "motion/react";
-
-const variants: Variants = {
-  normal: {
-    x: 0,
-    y: 0,
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 20,
-    },
-  },
-  animate: {
-    x: [0, 2, 0],
-    y: [0, -2, 0],
-    transition: {
-      duration: 2,
-      ease: "easeInOut",
-      repeat: Infinity,
-    },
-  },
-};
-
-interface PlaneProps extends React.SVGAttributes<SVGSVGElement> {
-  width?: number;
-  height?: number;
-  strokeWidth?: number;
-  stroke?: string;
-}
-
-const Plane = ({
-  width = 28,
-  height = 28,
-  strokeWidth = 2,
-  stroke = "#ffffff",
-  ...props
-}: PlaneProps) => {
-  const controls = useAnimation();
-
-  return (
-    <div
-      style={{
-        cursor: "pointer",
-        userSelect: "none",
-        padding: "8px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-      onMouseEnter={() => controls.start("animate")}
-      onMouseLeave={() => controls.start("normal")}
-    >
-      <motion.svg
-        xmlns="http://www.w3.org/2000/svg"
-        width={width}
-        height={height}
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke={stroke}
-        strokeWidth={strokeWidth}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        variants={variants}
-        animate={controls}
-      >
-        <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
-      </motion.svg>
-    </div>
-  );
-};
-
-export { Plane };
-
+      :root {
+        --su-blue: #0071bc;
+      }
     </style>
-</head>
-<body class="font-sans antialiased bg-gray-100">
-    <!-- Navbar -->
-    <nav class="bg-black text-white sticky top-0 z-50">
-        <div class="container mx-auto px-6 py-3">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center">
-                        <i class="fas fa-rocket text-2xl text-blue-400 mr-2"></i>
-                        <span class="text-2xl font-bold">SUJVERSE</span>
-                    </div>
-                </div>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#" class="hover:text-blue-300 transition">Home</a>
-                    <a href="#about" class="hover:text-blue-300 transition">About</a>
-                    <a href="#technology" class="hover:text-blue-300 transition">Technology</a>
-                    <a href="#vehicles" class="hover:text-blue-300 transition">Vehicles</a>
-                    <a href="#launch" class="hover:text-blue-300 transition">Launch</a>
-                    <a href="#contact" class="hover:text-blue-300 transition">Contact</a>
-                </div>
-                <div class="md:hidden flex items-center">
-                    <button class="outline-none mobile-menu-button">
-                        <svg class="w-6 h-6 text-blue-300 hover:text-blue-100"
-                            fill="none"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div class="mobile-menu hidden md:hidden bg-black">
-            <div class="container mx-auto px-6 py-3 flex flex-col space-y-2">
-                <a href="#" class="block py-1 hover:text-blue-300 transition">Home</a>
-                <a href="#about" class="block py-1 hover:text-blue-300 transition">About</a>
-                <a href="#technology" class="block py-1 hover:text-blue-300 transition">Technology</a>
-                <a href="#vehicles" class="block py-1 hover:text-blue-300 transition">Vehicles</a>
-                <a href="#launch" class="block py-1 hover:text-blue-300 transition">Launch</a>
-                <a href="#contact" class="block py-1 hover:text-blue-300 transition">Contact</a>
-            </div>
-        </div>
-    </nav>
+  </head>
+  <body class="bg-gray-900 text-white">
+    <!-- Header -->
+    <header class="bg-[var(--su-blue)] shadow-lg">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold tracking-wide">SUJVERSE</h1>
+        <nav class="space-x-6 text-sm font-medium">
+          <a href="#about" class="hover:underline">About</a>
+          <a href="#services" class="hover:underline">What We Do</a>
+          <a href="#contact" class="hover:underline">Contact</a>
+        </nav>
+      </div>
+    </header>
 
     <!-- Hero Section -->
-    <section class="hero-gradient text-white py-20 md:py-32">
-        <div class="container mx-auto px-6 py-6 flex flex-col md:flex-row items-center">
-            <div class="md:w-1/2 mb-10 md:mb-0">
-                <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">
-                    The Future of <span class="text-blue-300">Integrated</span> Transportation
-                </h1>
-                <p class="text-xl mb-8 text-gray-200">
-                    Where aerospace, aviation, and automotive technologies converge to create revolutionary mobility solutions. Launching October 9, 2025.
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <a href="#launch" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full transition duration-300">
-                        Join Our Mission
-                    </a>
-                    <a href="#vehicles" class="border-2 border-white hover:border-blue-300 text-white font-bold py-3 px-8 rounded-full transition duration-300">
-                        Explore Vehicles
-                    </a>
-                </div>
-            </div>
-            <div class="md:w-1/2 flex justify-center">
-                <img src="https://images.unsplash.com/photo-1589254065878-42e28c8f52a0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                     alt="Concept Vehicle" 
-                     class="w-full max-w-lg rounded-lg shadow-2xl vehicle-animation">
-            </div>
-        </div>
-    </section>
-
-    <!-- Countdown Section -->
-    <section id="launch" class="bg-gray-900 text-white py-12">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-8">
-                Launch Countdown: October 9, 2025
-            </h2>
-            <div class="grid grid-cols-4 gap-4 max-w-2xl mx-auto">
-                <div class="countdown-item">
-                    <div class="text-5xl font-bold" id="days">00</div>
-                    <div class="text-sm uppercase opacity-70">Days</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="text-5xl font-bold" id="hours">00</div>
-                    <div class="text-sm uppercase opacity-70">Hours</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="text-5xl font-bold" id="minutes">00</div>
-                    <div class="text-sm uppercase opacity-70">Minutes</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="text-5xl font-bold" id="seconds">00</div>
-                    <div class="text-sm uppercase opacity-70">Seconds</div>
-                </div>
-            </div>
-        </div>
+    <section class="text-center py-24 bg-gradient-to-b from-[var(--su-blue)] to-blue-800">
+      <h2 class="text-4xl md:text-5xl font-bold mb-4">Aviation. Innovation. Revolution.</h2>
+      <p class="text-lg max-w-2xl mx-auto mb-8">At SUJVERSE, we're reshaping the skies with futuristic content, drone engineering, and aerospace manufacturing for tomorrow’s world.</p>
+      <a href="#services" class="bg-white text-[var(--su-blue)] font-semibold py-3 px-6 rounded-full hover:bg-gray-200 transition">Explore Our Mission</a>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Redefining Mobility Across Domains</h2>
-                <div class="w-20 h-1 bg-blue-500 mx-auto"></div>
-                <p class="max-w-2xl mx-auto mt-6 text-gray-600">
-                    Sujverse integrates the best of NASA, SpaceX, Boeing, Airbus, Toyota, and BMW technologies to create a seamless transportation ecosystem.
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-3 gap-10">
-                <div class="bg-gray-50 p-8 rounded-xl shadow-md card-hover">
-                    <div class="text-blue-500 mb-4">
-                        <i class="fas fa-space-shuttle text-4xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Space Innovation</h3>
-                    <p class="text-gray-600">
-                        Combining SpaceX's reusability with NASA's research to democratize space access and establish orbital infrastructure.
-                    </p>
-                </div>
-                <div class="bg-gray-50 p-8 rounded-xl shadow-md card-hover">
-                    <div class="text-blue-500 mb-4">
-                        <i class="fas fa-plane text-4xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Aviation Evolution</h3>
-                    <p class="text-gray-600">
-                        Merging Boeing and Airbus expertise with cutting-edge propulsion for cleaner, faster, and smarter air travel.
-                    </p>
-                </div>
-                <div class="bg-gray-50 p-8 rounded-xl shadow-md card-hover">
-                    <div class="text-blue-500 mb-4">
-                        <i class="fas fa-car text-4xl"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Automotive Revolution</h3>
-                    <p class="text-gray-600">
-                        Integrating Toyota's reliability and BMW's performance with autonomous tech for next-gen personal mobility.
-                    </p>
-                </div>
-            </div>
+    <section id="about" class="py-20 bg-gray-950 px-6">
+      <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h3 class="text-3xl font-bold mb-4 text-[var(--su-blue)]">Who We Are</h3>
+          <p class="text-gray-300 mb-4">SUJVERSE is a next-gen aerospace brand blending creative aviation content with real-world drone, helicopter, and aircraft innovation. Our vision is to educate, inspire, and manufacture future-ready flying tech.</p>
+          <p class="text-gray-400">Founded by a passionate team of aviation enthusiasts and engineers, we aim to become a global force in the sky-tech industry.</p>
         </div>
+        <img src="https://images.unsplash.com/photo-1504198266285-165dc7a1dfc0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1050&q=80" alt="SUJVERSE Plane" class="rounded-xl shadow-lg" />
+      </div>
     </section>
 
-    <!-- Technology Section -->
-    <section id="technology" class="py-20 bg-gray-100">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Unified Technology Platform</h2>
-                <div class="w-20 h-1 bg-blue-500 mx-auto"></div>
-                <p class="max-w-2xl mx-auto mt-6 text-gray-600">
-                    Our proprietary technologies enable seamless transitions between terrestrial, aerial, and space environments.
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-10 items-center mb-16">
-                <div class="order-2 md:order-1">
-                    <h3 class="text-2xl font-bold mb-4">Adaptive Propulsion Systems</h3>
-                    <p class="text-gray-600 mb-6">
-                        Our multi-mode propulsion units automatically adjust between air-breathing jets, electric VTOL, and rocket modes based on altitude and velocity requirements.
-                    </p>
-                    <ul class="space-y-3">
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
-                            <span>Single propulsion solution from ground to orbit</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
-                            <span>90% reduction in maintenance complexity</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
-                            <span>AI-optimized for maximum efficiency</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="order-1 md:order-2">
-                    <img src="https://images.unsplash.com/photo-1653471329379-4d3b12cdab4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                         alt="Propulsion Technology" 
-                         class="w-full rounded-xl shadow-lg">
-                </div>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-10 items-center">
-                <div>
-                    <img src="https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                         alt="Material Science" 
-                         class="w-full rounded-xl shadow-lg">
-                </div>
-                <div>
-                    <h3 class="text-2xl font-bold mb-4">Smart Materials & Structures</h3>
-                    <p class="text-gray-600 mb-6">
-                        Our shape-memory alloys and self-healing composites revolutionize vehicle design, allowing single structures to perform optimally in atmospheres from sea level to orbit.
-                    </p>
-                    <ul class="space-y-3">
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
-                            <span>Morphing aerodynamic surfaces</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
-                            <span>Thermal protection that adapts to heating</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-check-circle text-blue-500 mt-1 mr-2"></i>
-                            <span>Nanostructured materials for extreme environments</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-gray-900 px-6">
+      <div class="max-w-6xl mx-auto text-center">
+        <h3 class="text-3xl font-bold mb-12 text-[var(--su-blue)]">What We Do</h3>
+        <div class="grid md:grid-cols-3 gap-10 text-left">
+          <div class="bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+            <h4 class="text-xl font-semibold mb-3">🎥 Aviation Content</h4>
+            <p class="text-gray-300">We create high-quality educational and entertaining content on aviation history, aircraft tech, pilot life, and aerospace news.</p>
+          </div>
+          <div class="bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+            <h4 class="text-xl font-semibold mb-3">🛸 Drone Manufacturing</h4>
+            <p class="text-gray-300">Building consumer and commercial drones with cutting-edge AI and flight systems, ready for the skies of tomorrow.</p>
+          </div>
+          <div class="bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+            <h4 class="text-xl font-semibold mb-3">🚁 Aircraft Development</h4>
+            <p class="text-gray-300">From small helicopters to future planes, SUJVERSE pioneers the design and engineering of next-gen flying machines.</p>
+          </div>
         </div>
+      </div>
     </section>
 
-    <!-- Brands Section -->
-    <section class="py-16 bg-gray-200">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-12">
-                <h3 class="text-xl text-gray-600">Building on the Legacy of</h3>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-6 gap-8 items-center justify-center">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/NASA_logo.svg" alt="NASA" class="h-12 mx-auto suj-tech-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/SpaceX_logo_black.svg" alt="SpaceX" class="h-12 mx-auto suj-tech-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Boeing_full_logo.svg" alt="Boeing" class="h-10 mx-auto suj-tech-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Airbus_Logo_2017.svg" alt="Airbus" class="h-12 mx-auto suj-tech-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/Toyota_carlogo.svg" alt="Toyota" class="h-10 mx-auto suj-tech-logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" alt="BMW" class="h-10 mx-auto suj-tech-logo">
-            </div>
-        </div>
-    </section>
-
-    <!-- Vehicles Section -->
-    <section id="vehicles" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">The Sujverse Fleet</h2>
-                <div class="w-20 h-1 bg-blue-500 mx-auto"></div>
-                <p class="max-w-2xl mx-auto mt-6 text-gray-600">
-                    A unified vehicle ecosystem designed to work seamlessly across all transportation domains.
-                </p>
-            </div>
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Vehicle 1 -->
-                <div class="bg-gray-50 rounded-xl overflow-hidden shadow-lg card-hover">
-                    <div class="h-56 bg-gray-900 flex items-center justify-center">
-                        <i class="fas fa-space-shuttle text-6xl text-blue-400"></i>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">Orion-X Spaceplane</h3>
-                        <p class="text-gray-600 mb-4">
-                            Our flagship orbital vehicle capable of runway takeoff, direct ascent to orbit, and runway landing.
-                        </p>
-                        <ul class="mb-4 space-y-2">
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>100 passengers capacity</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>6-hour NYC to Sydney</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>Point-to-point suborbital</span>
-                            </li>
-                        </ul>
-                        <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition">
-                            Learn More
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Vehicle 2 -->
-                <div class="bg-gray-50 rounded-xl overflow-hidden shadow-lg card-hover">
-                    <div class="h-56 bg-gray-800 flex items-center justify-center">
-                        <i class="fas fa-plane-departure text-6xl text-blue-400"></i>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">Aether Urban Commuter</h3>
-                        <p class="text-gray-600 mb-4">
-                            Transformative personal air vehicle converting between car and VTOL aircraft modes.
-                        </p>
-                        <ul class="mb-4 space-y-2">
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>Seats 4 comfortably</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>500 mile range</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>Fully autonomous</span>
-                            </li>
-                        </ul>
-                        <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition">
-                            Learn More
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Vehicle 3 -->
-                <div class="bg-gray-50 rounded-xl overflow-hidden shadow-lg card-hover">
-                    <div class="h-56 bg-gray-700 flex items-center justify-center">
-                        <i class="fas fa-shuttle-van text-6xl text-blue-400"></i>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2">TerraMax Ground Transport</h3>
-                        <p class="text-gray-600 mb-4">
-                            Luxury autonomous ground vehicle with Space-grade comfort and safety systems.
-                        </p>
-                        <ul class="mb-4 space-y-2">
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>G-force adaptive seating</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>Zero-emission power</span>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-check text-green-500 mr-2"></i>
-                                <span>Biometric wellness</span>
-                            </li>
-                        </ul>
-                        <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition">
-                            Learn More
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Call to Action -->
-    <section class="py-20 hero-gradient text-white">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-6">
-                Be Part of the Transportation Revolution
-            </h2>
-            <p class="max-w-2xl mx-auto text-xl mb-10">
-                Join our mission to create an integrated future where boundaries between Earth and space transportation disappear.
-            </p>
-            <div class="flex flex-wrap justify-center gap-6">
-                <a href="#" class="bg-white hover:bg-gray-100 text-blue-600 font-bold py-4 px-8 rounded-full transition duration-300">
-                    Invest With Us
-                </a>
-                <a href="#" class="border-2 border-white hover:bg-white hover:text-blue-600 font-bold py-4 px-8 rounded-full transition duration-300">
-                    Careers
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Connect With Us</h2>
-                <div class="w-20 h-1 bg-blue-500 mx-auto"></div>
-                <p class="max-w-2xl mx-auto mt-6 text-gray-600">
-                    Interested in our vision? Reach out for partnerships, media inquiries, or technical information.
-                </p>
-            </div>
-            
-            <div class="max-w-4xl mx-auto">
-                <form class="grid md:grid-cols-2 gap-8">
-                    <div>
-                        <div class="mb-6">
-                            <label for="name" class="block text-gray-700 font-medium mb-2">Name</label>
-                            <input type="text" id="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div class="mb-6">
-                            <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
-                            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div class="mb-6">
-                            <label for="phone" class="block text-gray-700 font-medium mb-2">Phone</label>
-                            <input type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-                    </div>
-                    <div>
-                        <div class="mb-6">
-                            <label for="subject" class="block text-gray-700 font-medium mb-2">Subject</label>
-                            <select id="subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option>General Inquiry</option>
-                                <option>Investment Opportunity</option>
-                                <option>Media Request</option>
-                                <option>Partnership</option>
-                                <option>Career Opportunity</option>
-                            </select>
-                        </div>
-                        <div class="mb-6">
-                            <label for="message" class="block text-gray-700 font-medium mb-2">Message</label>
-                            <textarea id="message" rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                        </div>
-                    </div>
-                    <div class="md:col-span-2 text-center">
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full transition duration-300">
-                            Send Message
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+    <!-- Contact -->
+    <section id="contact" class="bg-gray-950 py-20 px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <h3 class="text-3xl font-bold text-[var(--su-blue)] mb-4">Get in Touch</h3>
+        <p class="text-gray-400 mb-8">Interested in collaborating, investing, or joining the SUJVERSE journey? Reach out to us and we’ll fly back to you soon.</p>
+        <a href="mailto:contact@sujverse.com" class="inline-block bg-[var(--su-blue)] text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-600 transition">Email Us</a>
+      </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white pt-16 pb-8">
-        <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-4 gap-12 mb-12">
-                <div>
-                    <h3 class="text-xl font-bold mb-4">
-                        <i class="fas fa-rocket text-blue-400 mr-2"></i> SUJVERSE
-                    </h3>
-                    <p class="text-gray-400 mb-4">
-                        Pioneering the future of integrated transportation across land, air, and space.
-                    </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white transition">
-                            <i class="fab fa-twitter text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition">
-                            <i class="fab fa-linkedin text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition">
-                            <i class="fab fa-youtube text-xl"></i>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white transition">
-                            <i class="fab fa-instagram text-xl"></i>
-                        </a>
-                    </div>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Explore</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
-                        <li><a href="#about" class="text-gray-400 hover:text-white transition">About Us</a></li>
-                        <li><a href="#technology" class="text-gray-400 hover:text-white transition">Technology</a></li>
-                        <li><a href="#vehicles" class="text-gray-400 hover:text-white transition">Vehicles</a></li>
-                        <li><a href="#launch" class="text-gray-400 hover:text-white transition">Launch</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Company</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Careers</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Investors</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Media</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Press Kit</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Blog</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
-                    <ul class="space-y-2">
-                        <li class="flex items-start">
-                            <i class="fas fa-map-marker-alt text-blue-400 mt-1 mr-2"></i>
-                            <span class="text-gray-400">1 Sujverse Way, Starbase, TX 78586</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-envelope text-blue-400 mt-1 mr-2"></i>
-                            <span class="text-gray-400">info@sujverse.com</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-phone-alt text-blue-400 mt-1 mr-2"></i>
-                            <span class="text-gray-400">+1 (888) SJVR-SPN</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
-                <div class="text-gray-400 text-sm mb-4 md:mb-0">
-                    &copy; 2023 Sujverse Corporation. All rights reserved.
-                </div>
-                <div class="flex space-x-6">
-                    <a href="#" class="text-gray-400 hover:text-white text-sm transition">Privacy Policy</a>
-                    <a href="#" class="text-gray-400 hover:text-white text-sm transition">Terms of Service</a>
-                    <a href="#" class="text-gray-400 hover:text-white text-sm transition">Cookie Policy</a>
-                </div>
-            </div>
-        </div>
+    <footer class="bg-gray-800 text-center py-6 text-gray-400 text-sm">
+      © 2025 SUJVERSE. All rights reserved.
     </footer>
-
-    <script>
-        // Mobile menu toggle
-        const btn = document.querySelector(".mobile-menu-button");
-        const menu = document.querySelector(".mobile-menu");
-        
-        btn.addEventListener("click", () => {
-            menu.classList.toggle("hidden");
-        });
-
-        // Countdown timer
-        function updateCountdown() {
-            const launchDate = new Date("October 9, 2025 00:00:00").getTime();
-            const now = new Date().getTime();
-            const distance = launchDate - now;
-            
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            document.getElementById("days").innerHTML = days.toString().padStart(2, "0");
-            document.getElementById("hours").innerHTML = hours.toString().padStart(2, "0");
-            document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, "0");
-            document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, "0");
-        }
-        
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-                
-                // Close mobile menu if open
-                menu.classList.add('hidden');
-            });
-        });
-    </script>
-</body>
+  </body>
 </html>
