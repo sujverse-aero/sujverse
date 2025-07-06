@@ -109,7 +109,30 @@
 <body class="space-bg">
     <div class="stars"></div>
     <div class="twinkling"></div>
-    
+
+    <script>
+  // Set launch date (October 1, 2025 at 00:00)
+  const launchDate = new Date("October 1, 2025 00:00:00").getTime();
+
+  const updateCountdown = () => {
+      const now = new Date().getTime();
+      const distance = launchDate - now;
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").innerText = String(days).padStart(2, '0');
+      document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+      document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+      document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+  };
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+</script>
+
     <!-- Navigation -->
     <nav class="relative z-50 py-6 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
@@ -135,7 +158,32 @@
             </div>
         </div>
     </nav>
-    
+
+    <script>
+  const menuButton = document.querySelector("nav button");
+  const navLinks = document.createElement("div");
+  navLinks.className = "flex flex-col mt-4 space-y-4 md:hidden text-white";
+
+  const links = ["Home", "About", "Content", "Gallery", "Contact"];
+  links.forEach(text => {
+    const a = document.createElement("a");
+    a.href = "#";
+    a.className = "nav-link hover:text-blue-400";
+    a.textContent = text;
+    navLinks.appendChild(a);
+  });
+
+  menuButton.addEventListener("click", () => {
+    const existing = document.querySelector("nav .mobile-nav");
+    if (existing) {
+      existing.remove();
+    } else {
+      navLinks.classList.add("mobile-nav");
+      menuButton.parentNode.appendChild(navLinks);
+    }
+  });
+</script>
+
     <!-- Hero Section -->
     <section class="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl mx-auto">
