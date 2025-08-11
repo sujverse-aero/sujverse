@@ -9,494 +9,186 @@
     <link rel="icon" type="image/png" href="image (2).png">
     <style>
   /* Apply Exo 2 font to whole website */
-  @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&display=swap');
+ tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1f3a5b',
+                        secondary: '#4d648d',
+                        accent: '#3c5b7a',
+                        dark: '#0f1c2e',
+                        light: '#acc2ef'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800&display=swap');
         
         body {
             font-family: 'Exo 2', sans-serif;
-            background-color: #0a0e17;
+            background-color: #0f1c2e;
             color: white;
             overflow-x: hidden;
         }
         
-        .space-bg {
-            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
-            position: relative;
-            min-height: 100vh;
-            overflow: hidden;
+        .orbitron {
+            font-family: 'Orbitron', sans-serif;
         }
         
-        .stars {
+        .star {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            display: block;
-            background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat top center;
-            z-index: 0;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
         }
         
-        .twinkling {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            display: block;
-            background: transparent url('https://www.transparenttextures.com/patterns/starfield.png') repeat top center;
-            animation: move-twink-back 200s linear infinite;
-            z-index: 1;
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
         }
         
-        @keyframes move-twink-back {
-            from {background-position:0 0;}
-            to {background-position:-10000px 5000px;}
+        .glow {
+            text-shadow: 0 0 10px rgba(124, 179, 255, 0.8);
         }
         
-        .glow-text {
-            text-shadow: 0 0 10px rgba(100, 150, 255, 0.8);
+        .pulse {
+            animation: pulse 2s infinite;
         }
         
-        .nav-link {
-            position: relative;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
         
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -2px;
-            left: 0;
-            background-color: #3b82f6;
-            transition: width 0.3s ease;
-        }
-        
-        .nav-link:hover::after {
-            width: 100%;
-        }
-        
-        .countdown-item {
-            background: rgba(16, 24, 39, 0.7);
+        .countdown-box {
+            background: rgba(31, 58, 91, 0.5);
+            border: 1px solid rgba(124, 179, 255, 0.3);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-        
-        .social-icon {
-            transition: all 0.3s ease;
-        }
-        
-        .social-icon:hover {
-            transform: translateY(-5px);
-            filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.7));
-        }
-        
-        .rocket {
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
         }
     </style>
 </head>
-<body class="space-bg">
-    <div class="stars"></div>
-    <div class="twinkling"></div>
-
-    <script>
-  // Set launch date (October 1, 2025 at 00:00)
-  const launchDate = new Date("October 1, 2025 00:00:00").getTime();
-
-  const updateCountdown = () => {
-      const now = new Date().getTime();
-      const distance = launchDate - now;
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      document.getElementById("days").innerText = String(days).padStart(2, '0');
-      document.getElementById("hours").innerText = String(hours).padStart(2, '0');
-      document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
-      document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
-  };
-
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-</script>
-
-    <!-- Navigation -->
-    <nav class="relative z-50 py-6 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
-                <span class="ml-2 text-xl font-bold text-blue-400">SUJVERSE</span>
-            </div>
-            <div class="hidden md:flex space-x-8">
-                <a href="#" class="nav-link text-white hover:text-blue-400">Home</a>
-                <a href="#" class="nav-link text-white hover:text-blue-400">About</a>
-                <a href="#" class="nav-link text-white hover:text-blue-400">Content</a>
-                <a href="#" class="nav-link text-white hover:text-blue-400">Gallery</a>
-                <a href="#" class="nav-link text-white hover:text-blue-400">Contact</a>
-            </div>
-            <div class="md:hidden">
-                <button class="text-white focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <script>
-  const menuButton = document.querySelector("nav button");
-  const navLinks = document.createElement("div");
-  navLinks.className = "flex flex-col mt-4 space-y-4 md:hidden text-white";
-
-  const links = ["Home", "About", "Content", "Gallery", "Contact"];
-  links.forEach(text => {
-    const a = document.createElement("a");
-    a.href = "#";
-    a.className = "nav-link hover:text-blue-400";
-    a.textContent = text;
-    navLinks.appendChild(a);
-  });
-
-  menuButton.addEventListener("click", () => {
-    const existing = document.querySelector("nav .mobile-nav");
-    if (existing) {
-      existing.remove();
-    } else {
-      navLinks.classList.add("mobile-nav");
-      menuButton.parentNode.appendChild(navLinks);
-    }
-  });
-</script>
-
-    <!-- Hero Section -->
-    <section class="relative z-10 min-h-screen flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto">
-            <h1 class="glow-text text-5xl md:text-7xl font-bold mb-6 text-white">
-                <span class="text-blue-400">SUJ</span><span class="text-white">VERSE</span>
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-300 mb-12 max-w-2xl mx-auto">
-                Exploring the universe of Aeronautics and Astronautics through captivating content
-            </p>
-            
-            <div class="mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-blue-300 mb-6">Launching October 2025</h2>
-                
-                <div class="flex justify-center space-x-4 mt-8">
-                    <div class="countdown-item rounded-lg p-4 w-20 md:w-24 text-center">
-                        <div class="text-3xl md:text-4xl font-bold text-blue-400" id="days">00</div>
-                        <div class="text-xs uppercase text-gray-400 mt-1">Days</div>
-                    </div>
-                    <div class="countdown-item rounded-lg p-4 w-20 md:w-24 text-center">
-                        <div class="text-3xl md:text-4xl font-bold text-blue-400" id="hours">00</div>
-                        <div class="text-xs uppercase text-gray-400 mt-1">Hours</div>
-                    </div>
-                    <div class="countdown-item rounded-lg p-4 w-20 md:w-24 text-center">
-                        <div class="text-3xl md:text-4xl font-bold text-blue-400" id="minutes">00</div>
-                        <div class="text-xs uppercase text-gray-400 mt-1">Minutes</div>
-                    </div>
-                    <div class="countdown-item rounded-lg p-4 w-20 md:w-24 text-center">
-                        <div class="text-3xl md:text-4xl font-bold text-blue-400" id="seconds">00</div>
-                        <div class="text-xs uppercase text-gray-400 mt-1">Seconds</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="rocket mb-16">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-            </div>
-            
-            <div class="flex justify-center space-x-6">
-                <a href="#" class="social-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
-                    </svg>
-                </a>
-                <a href="#" class="social-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                    </svg>
-                </a>
-                <a href="#" class="social-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/>
-                    </svg>
-                </a>
-                <a href="#" class="social-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-black bg-white rounded-full" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
-                    </svg>
-                </a>
-                <a href="#" class="social-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                    </svg>
-                </a>
-                <a href="#" class="social-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-black bg-white rounded" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-3 18v-12l9 6-9 6z"/>
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </section>
+<body class="min-h-screen relative">
+    <!-- Background stars -->
+    <div id="stars-container"></div>
     
-    <!-- About Section -->
-    <section class="relative z-10 py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-transparent to-blue-900/10">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-blue-400 mb-4">About SujVerse</h2>
-                <div class="w-24 h-1 bg-blue-500 mx-auto"></div>
+    <!-- Main content -->
+    <div class="container mx-auto px-4 py-16 relative z-10">
+        <header class="flex justify-between items-center mb-20">
+            <h1 class="text-3xl md:text-4xl font-bold orbitron text-primary-200">SUJVERSE</h1>
+            <div class="hidden md:flex space-x-6">
+                <a href="#" class="hover:text-accent-300 transition">About</a>
+                <a href="#" class="hover:text-accent-300 transition">Vision</a>
+                <a href="#" class="hover:text-accent-300 transition">Contact</a>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h3 class="text-2xl font-bold text-white mb-6">Exploring the Skies and Beyond</h3>
-                    <p class="text-gray-300 mb-6">
-                        SujVerse is an aviation-focused content creation platform dedicated to bringing you the most 
-                        captivating and informative content about aircraft, space exploration, and the science of flight.
-                    </p>
-                    <p class="text-gray-300 mb-6">
-                        From commercial airliners to military jets, from the history of aviation to the future of space travel, 
-                        we cover it all with stunning visuals and expert commentary.
-                    </p>
-                    <div class="flex space-x-4">
-                        <div class="bg-blue-900/50 p-4 rounded-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
-                            </svg>
-                            <h4 class="font-bold text-white">Documentaries</h4>
-                        </div>
-                        <div class="bg-blue-900/50 p-4 rounded-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                            </svg>
-                            <h4 class="font-bold text-white">Videos</h4>
-                        </div>
-                        <div class="bg-blue-900/50 p-4 rounded-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            <h4 class="font-bold text-white">Photography</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="relative">
-                    <div class="bg-blue-900/20 backdrop-blur-sm border border-blue-900/30 rounded-xl p-6">
-                        <div class="flex items-center mb-6">
-                            <div class="h-12 w-12 rounded-full bg-blue-900/50 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                </svg>
-                            </div>
-                            <div class="ml-4">
-                                <h4 class="font-bold text-white">Exclusive Content</h4>
-                                <p class="text-sm text-gray-400">Coming October 2025</p>
-                            </div>
-                        </div>
-                        <p class="text-gray-300 mb-6">
-                            Be the first to access our premium content by subscribing to our newsletter. Get behind-the-scenes 
-                            footage, early releases, and exclusive aviation insights.
-                        </p>
-                        <div class="flex">
-                            <input type="email" placeholder="Your email address" class="bg-blue-900/30 text-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-r-lg transition duration-300">
-                                Subscribe
-                            </button>
-                        </div>
-                    </div>
-                    <div class="absolute -top-6 -right-6 -z-10">
-                        <div class="h-32 w-32 rounded-full bg-blue-500/10 blur-xl"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Content Preview -->
-    <section class="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-blue-400 mb-4">Content Preview</h2>
-                <div class="w-24 h-1 bg-blue-500 mx-auto"></div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-blue-900/20 backdrop-blur-sm border border-blue-900/30 rounded-xl overflow-hidden transition-transform duration-300 hover:scale-105">
-                    <div class="h-48 bg-gradient-to-r from-blue-900/50 to-indigo-900/50 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                        </svg>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-white mb-3">Aircraft Spotting</h3>
-                        <p class="text-gray-300 mb-4">
-                            High-quality videos and photos of commercial and military aircraft from around the world.
-                        </p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-blue-400">Coming Soon</span>
-                            <a href="#" class="text-blue-400 hover:text-blue-300 flex items-center">
-                                <span>View</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-blue-900/20 backdrop-blur-sm border border-blue-900/30 rounded-xl overflow-hidden transition-transform duration-300 hover:scale-105">
-                    <div class="h-48 bg-gradient-to-r from-indigo-900/50 to-purple-900/50 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                        </svg>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-white mb-3">Aviation History</h3>
-                        <p class="text-gray-300 mb-4">
-                            Documentaries exploring the evolution of flight technology and iconic aircraft.
-                        </p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-blue-400">Coming Soon</span>
-                            <a href="#" class="text-blue-400 hover:text-blue-300 flex items-center">
-                                <span>View</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-blue-900/20 backdrop-blur-sm border border-blue-900/30 rounded-xl overflow-hidden transition-transform duration-300 hover:scale-105">
-                    <div class="h-48 bg-gradient-to-r from-purple-900/50 to-blue-900/50 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11.804A4.997 4.997 0 0013 8a5 5 0 00-10 0c0 1.518.686 2.872 1.76 3.788l-.003.003A7.974 7.974 0 0012 20a7.974 7.974 0 007.243-8.196l-.003-.004A4.997 4.997 0 0017 8a5 5 0 00-10 0c0 1.518.686 2.872 1.76 3.788l-.003.003A7.974 7.974 0 0012 20a7.974 7.974 0 007.243-8.196l-.003-.004z" />
-                        </svg>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-white mb-3">Space Exploration</h3>
-                        <p class="text-gray-300 mb-4">
-                            The latest developments in space technology and missions beyond our atmosphere.
-                        </p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-blue-400">Coming Soon</span>
-                            <a href="#" class="text-blue-400 hover:text-blue-300 flex items-center">
-                                <span>View</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Footer -->
-    <footer class="relative z-10 py-12 px-4 sm:px-6 lg:px-8 bg-blue-900/10 border-t border-blue-900/20">
-        <div class="max-w-6xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
-                        </svg>
-                        <span class="ml-2 text-xl font-bold text-blue-400">SujVerse</span>
-                    </div>
-                    <p class="text-gray-400">
-                        Exploring the universe of aviation through captivating content across all platforms.
-                    </p>
-                </div>
-                
-                <div>
-                    <h3 class="text-lg font-bold text-white mb-4">Quick Links</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Home</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">About</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Content</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Gallery</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h3 class="text-lg font-bold text-white mb-4">Content</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Aircraft Spotting</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Aviation History</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Space Exploration</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Flight Technology</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-blue-400 transition">Behind the Scenes</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h3 class="text-lg font-bold text-white mb-4">Connect</h3>
-                    <div class="flex space-x-4 mb-4">
-                        <a href="#" class="text-gray-400 hover:text-blue-400 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-blue-400 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-blue-400 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/>
-                            </svg>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-blue-400 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                            </svg>
-                        </a>
-                    </div>
-                    <p class="text-gray-400">
-                        Subscribe to our newsletter for updates and exclusive content.
-                    </p>
-                </div>
-            </div>
-            
-            <div class="border-t border-blue-900/20 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-gray-500 text-sm mb-4 md:mb-0">
-                    © 2025 SujVerse. All rights reserved.
+            <button class="md:hidden text-xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </header>
+        
+        <main class="mt-20">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl md:text-6xl lg:text-7xl font-bold orbitron mb-6 glow">
+                    PREPARE FOR <span class="text-accent-300">SPACEFLIGHT</span>
+                </h2>
+                <p class="text-xl md:text-2xl max-w-3xl mx-auto opacity-90">
+                    SujVerse is entering final approach. All systems are go for our October 2025 launch window.
                 </p>
-                <div class="flex space-x-6">
-                    <a href="#" class="text-gray-500 hover:text-blue-400 text-sm">Privacy Policy</a>
-                    <a href="#" class="text-gray-500 hover:text-blue-400 text-sm">Terms of Service</a>
-                    <a href="#" class="text-gray-500 hover:text-blue-400 text-sm">Cookies</a>
+            </div>
+            
+            <!-- Countdown section -->
+            <div class="max-w-4xl mx-auto mb-32">
+                <h3 class="text-center text-2xl md:text-3xl orbitron mb-8">
+                    COUNTDOWN TO LAUNCH
+                </h3>
+                <div class="grid grid-cols-4 gap-4 text-center">
+                    <div class="countdown-box rounded-lg p-4 md:p-6">
+                        <div class="text-3xl md:text-5xl font-bold orbitron" id="days">00</div>
+                        <div class="text-sm md:text-base opacity-80">DAYS</div>
+                    </div>
+                    <div class="countdown-box rounded-lg p-4 md:p-6">
+                        <div class="text-3xl md:text-5xl font-bold orbitron" id="hours">00</div>
+                        <div class="text-sm md:text-base opacity-80">HOURS</div>
+                    </div>
+                    <div class="countdown-box rounded-lg p-4 md:p-6">
+                        <div class="text-3xl md:text-5xl font-bold orbitron" id="minutes">00</div>
+                        <div class="text-sm md:text-base opacity-80">MINUTES</div>
+                    </div>
+                    <div class="countdown-box rounded-lg p-4 md:p-6">
+                        <div class="text-3xl md:text-5xl font-bold orbitron" id="seconds">00</div>
+                        <div class="text-sm md:text-base opacity-80">SECONDS</div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </footer>
+            
+            <!-- Social media section -->
+            <div class="text-center">
+                <h3 class="text-2xl md:text-3xl orbitron mb-8">
+                    FOLLOW OUR <span class="text-accent-300">FLIGHT PATH</span>
+                </h3>
+                <p class="max-w-2xl mx-auto mb-10 text-lg opacity-90">
+                    Track our pre-launch updates across all mission control channels.
+                </p>
+                
+                <div class="flex justify-center space-x-6 md:space-x-10 flex-wrap">
+                    <a href="#" class="social-icon hover:text-[#E1306C] transition text-3xl md:text-4xl mb-4 pulse" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-icon hover:text-[#FF0000] transition text-3xl md:text-4xl mb-4 pulse" title="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="#" class="social-icon hover:text-accent-300 transition text-3xl md:text-4xl mb-4 pulse" title="Website">
+                        <i class="fas fa-globe"></i>
+                    </a>
+                    <a href="#" class="social-icon hover:text-[#1DA1F2] transition text-3xl md:text-4xl mb-4 pulse" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-icon hover:text-[#000000] transition text-3xl md:text-4xl mb-4 pulse" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <a href="#" class="social-icon hover:text-[#0077B5] transition text-3xl md:text-4xl mb-4 pulse" title="LinkedIn [Founder]">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="mt-32 text-center opacity-70 text-sm">
+            <p>© 2023 SujVerse. All rights reserved. The future is coming.</p>
+        </footer>
+    </div>
     
     <script>
-        // Countdown timer
+        // Create stars
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random size between 1-3px
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Random position
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation duration
+                star.style.setProperty('--duration', `${Math.random() * 5 + 3}s`);
+                
+                container.appendChild(star);
+            }
+        }
+        
+        // Countdown function
         function updateCountdown() {
-            const launchDate = new Date("October 1, 2025 00:00:00").getTime();
+            const launchDate = new Date('October 9, 2025 00:00:00').getTime();
             const now = new Date().getTime();
             const distance = launchDate - now;
             
@@ -505,27 +197,17 @@
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
             
-            document.getElementById("days").innerHTML = days.toString().padStart(2, "0");
-            document.getElementById("hours").innerHTML = hours.toString().padStart(2, "0");
-            document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, "0");
-            document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, "0");
-            
-            if (distance < 0) {
-                clearInterval(countdownInterval);
-                document.getElementById("days").innerHTML = "00";
-                document.getElementById("hours").innerHTML = "00";
-                document.getElementById("minutes").innerHTML = "00";
-                document.getElementById("seconds").innerHTML = "00";
-            }
+            document.getElementById('days').innerHTML = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerHTML = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerHTML = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerHTML = seconds.toString().padStart(2, '0');
         }
         
-        updateCountdown();
-        const countdownInterval = setInterval(updateCountdown, 1000);
-        
-        // Mobile menu toggle
-        document.querySelector('.md\\:hidden button').addEventListener('click', function() {
-            // You would implement mobile menu functionality here
-            alert('Mobile menu would open here');
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
         });
     </script>
 </body>
